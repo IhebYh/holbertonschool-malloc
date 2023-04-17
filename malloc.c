@@ -61,7 +61,7 @@ void *_malloc(size_t size)
 		{
 			return (NULL);
 		}
-        allocated += pagesize;
+		allocated += pagesize;
 		available += pagesize;
 	}
 
