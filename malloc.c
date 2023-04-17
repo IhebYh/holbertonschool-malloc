@@ -45,20 +45,30 @@ void *_malloc(size_t size)
 	if (size == 0)
 		return (NULL);
 
-	for (; allocated < chunk_size; allocated += pagesize)
+	while (available < chunk_size)
+	{
 		if (!next_spot)
 		{
 			pagesize = sysconf(_SC_PAGESIZE);
 			next_spot = sbrk(pagesize);
+			if (next_spot == (void *)-1)
+			{
+				next_spot = NULL;
+				return (NULL);
+			}
 		}
-		else
+		else if (sbrk(pagesize) == (void *)-1)
 		{
-			sbrk(pagesize);
+			return (NULL);
 		}
+
+		available += pagesize;
+	}
 
 	tmp = next_spot;
 	memcpy(tmp, &chunk_size, sizeof(chunk_size));
+	allocate(tmp);
 	next_spot = shift_address(tmp, chunk_size);
-
+	available -= chunk_size;
 	return (shift_address(tmp, sizeof(chunk_size)));
 }
