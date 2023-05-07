@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #define METADATA 0x10
+#define ALIGNMENT(size) (size + (METADATA - (size % METADATA)))
 #define shift_address(addr, size) \
 	((void *)((char *)(addr) + (size)))
 #define is_allocated(x) (*((size_t *)(x)) & 1)
