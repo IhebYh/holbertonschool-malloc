@@ -8,6 +8,7 @@
 
 #define METADATA 0x10
 #define ALIGNMENT(size) (size + (METADATA - (size % METADATA)))
+#define _MIN(x, y) (y ^ ((x ^ y) & -(x < y)))
 #define shift_address(addr, size) \
 	((void *)((char *)(addr) + (size)))
 #define is_allocated(x) (*((size_t *)(x)) & 1)
